@@ -59,6 +59,6 @@ app.listen(puerto, (error)=>{
     if(error){
         return console.log('Ocurrió un error');
     }else{
-        console.log('Todo salió bien!');
+        console.log('Puerto: ', PORT);
     }
 });
