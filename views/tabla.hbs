@@ -1,0 +1,148 @@
+<div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <h5>Totalizados</h5>
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        <div class="row"><div class="col"><b>Golpes:</b></div>
+          <div class="col">{{golpes_total}}</div>
+          <div class="col"><b>Tiempo:</b></div>
+          <div class="col">{{getTiempo tiempo_total}}</div>
+        </div>
+        <div class="row"><div class="col"><b>Tiempo detenido:</b></div>
+          <div class="col">{{getTiempo tiempo_detenido}}</div>
+          <div class="col"><b>Tiempo trabajado:</b></div>
+          <div class="col">{{getTiempo tiempo_activa}}</div>
+        </div>
+        <div class="row"><div class="col"><b>Veces que se detuvo:</b></div>
+          <div class="col">{{veces_detenida}}</div>
+          <div class="col"><b>Veces que estuvo activa:</b></div>
+          <div class="col">{{veces_activa}}</div>
+        </div>
+        <div class="row"><div class="col"><b>Tiempo prom. de paros:</b></div>
+          <div class="col">{{getTiempo prom_tiempo_paro}}</div>
+          <div class="col"><b>Tiempo prom. entre paros:</b></div>
+          <div class="col">{{getTiempo prom_tiempo_activa}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          <h5>Datos de los Moldes</h5>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+
+
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <table  class="table table-hover">
+              <thead class="thead-light">
+                <th scope="col">Nombre del Molde</th>
+                <th scope="col">Golpes</th>
+                <th scope="col">Tiempo que se usó</th>
+              </thead>
+              <tbody>
+                {{#each detalle_molde}}
+                <tr>
+                  <td>{{nombre}}</td>
+                  <td>{{golpes}}</td>
+                  <td>{{getTiempo tiempo}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card-body">
+
+
+            <script type="text/javascript">
+              google.charts.load('current', {'packages':['corechart']});
+              google.charts.setOnLoadCallback(drawChart);
+              function drawChart() {
+                var data = new google.visualization.DataTable();
+                var data = google.visualization.arrayToDataTable([
+                   ['Nombre', 'Golpes'],
+                   {{#each detalle_molde}}
+                     ['{{{nombre}}}',{{golpes}}],
+                   {{/each}}
+                ]);
+
+
+                // data.addRows([
+                //   {{#each detalle_molde}}
+                //     ['{{{nombre}}}',{{golpes}}],
+                //   {{/each}}
+                // ]);
+                var options = {
+                  width: '700',
+                  chartArea: {
+                    width: '70%'
+                  },
+                 };
+                var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+              }
+            </script>
+              <div id="chart_div">
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          <h5>Tabla completa</h5>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Golpes</th>
+            <th scope="col">Estatus del clutch</th>
+            <th scope="col">TimeStamp</th>
+            <th scope="col">Tiempo de inicio</th>
+            <th scope="col">Duración del estatus</th>
+            <th scope="col">Golpes por estatus</th>
+            <th scope="col">Moldes</th>
+          </thead>
+          <tbody>
+            {{#each informacion}}
+            <tr class="{{getEstatusClass Mode_ClutchOn}}">
+              <th scope="row">{{orden}}</th>
+              <th scope="row">{{id}}</th>
+              <td>{{golpes}}</td>
+              <td>{{getEstatus Mode_ClutchOn}}</td>
+              <td>{{PlcTimesStamp}}</td>
+              <td>{{getFecha PlcTimesStamp}} {{getHora PlcTimesStamp}}</td>
+              <td>{{getTiempo tiempo_por_estatus}}</td>
+              <td>{{golpes_por_estatus}}</td>
+              <td>{{moldes_usados_por_estatus}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
